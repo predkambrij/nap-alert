@@ -13,7 +13,7 @@ import ImageEnhance
 from util import Util
 
 
-from GlobalConstants import GlobalConstants
+from globalconstants import GlobalConstants
 CAMERA_INDEX = GlobalConstants.CAMERA_INDEX
 SCALE_FACTOR = GlobalConstants.SCALE_FACTOR
 FACE_CLASSIFIER_PATH = GlobalConstants.FACE_CLASSIFIER_PATH
@@ -65,7 +65,12 @@ class FaceModel:
     };
     
     def add(self,rects):
-        """Add new set of rectangles to model"""
+        """Add new set of rectangles to model
+        Examples:
+        final rects= {'eyeRight': array([714, 283, 790, 359], dtype=int32), 'eyeLeft': array([517, 274, 599, 356], dtype=int32), 'face': array([414, 158, 847, 591], dtype=int32)}
+        final rects= {'eyeRight': array([689, 279, 769, 359], dtype=int32), 'eyeLeft': array([520, 276, 599, 355], dtype=int32), 'face': array([414, 158, 847, 591], dtype=int32)}
+        final rects= {'eyeRight': array([694, 282, 769, 357], dtype=int32), 'eyeLeft': array([521, 278, 595, 352], dtype=int32), 'face': array([421, 169, 841, 589], dtype=int32)}
+        """
         
         # Checks to see if face has moved significantly. If so, resets history.
         if(self._faceHasMoved(rects['face'])):

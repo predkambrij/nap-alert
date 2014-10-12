@@ -13,7 +13,7 @@ import ImageEnhance
 from util import Util
 
 
-from GlobalConstants import GlobalConstants
+from globalconstants import GlobalConstants
 CAMERA_INDEX = GlobalConstants.CAMERA_INDEX
 SCALE_FACTOR = GlobalConstants.SCALE_FACTOR
 FACE_CLASSIFIER_PATH = GlobalConstants.FACE_CLASSIFIER_PATH
@@ -131,7 +131,7 @@ class FaceDetector:
                 rects['eyeRight'] = e;
         # TODO error checking
         # TODO calculate signal quality
-        ##print 'final rects=',rects
+        print 'final rects=',rects
         
         return rects;
 

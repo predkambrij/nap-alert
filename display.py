@@ -15,7 +15,7 @@ from util import Util
 
 
  
-from GlobalConstants import GlobalConstants
+from globalconstants import GlobalConstants
 CAMERA_INDEX = GlobalConstants.CAMERA_INDEX
 SCALE_FACTOR = GlobalConstants.SCALE_FACTOR
 FACE_CLASSIFIER_PATH = GlobalConstants.FACE_CLASSIFIER_PATH
@@ -61,7 +61,8 @@ class Display:
             eyeLeftHeight = eyeRects[0][3] - eyeRects[0][1];
             eyeLeftWidth = eyeRects[0][2] - eyeRects[0][0];
             eyeLeftIMG = frame[(eyeRects[0][1]+eyeLeftHeight*cropTop):(eyeRects[0][3]-eyeLeftHeight*cropBottom), eyeRects[0][0]:eyeRects[0][2]];
-            eyeLeftExpanded =             frame[(eyeRects[0][1]+eyeLeftHeight*(cropTop/2)):(eyeRects[0][3]-eyeLeftHeight*(cropBottom/2)), (eyeRects[0][0]-eyeLeftWidth*cropTop):(eyeRects[0][2]+eyeLeftWidth*cropTop)];
+            eyeLeftExpanded = frame[(eyeRects[0][1]+eyeLeftHeight*(cropTop/2)):(eyeRects[0][3]-eyeLeftHeight*(cropBottom/2)),
+                                    (eyeRects[0][0]-eyeLeftWidth*cropTop):(eyeRects[0][2]+eyeLeftWidth*cropTop)];
             
             #eyeLeftExpanded = cv2.resize(eyeLeftExpanded,None,fx=0.5,fy=0.5);
             eyeLeftExpanded = cv2.cvtColor(eyeLeftExpanded,cv.CV_BGR2GRAY);
@@ -145,7 +146,8 @@ class Display:
             irisMaxRadius = int(round(eyeLeftEqualized.shape[1]*0.25));
             # TODO update this based on previously-found iris radii
             minDistance = irisMaxRadius*2;
-            circles = cv2.HoughCircles(eyeLeftBlurredBW, cv.CV_HOUGH_GRADIENT, 2.5, minDistance, param1=30, param2=30,minRadius=irisMinRadius,maxRadius=irisMaxRadius);
+            circles = cv2.HoughCircles(eyeLeftBlurredBW, cv.CV_HOUGH_GRADIENT, 2.5, minDistance,
+                                       param1=30, param2=30,minRadius=irisMinRadius,maxRadius=irisMaxRadius);
             
             eyeLeftBW_C = cv2.cvtColor(B,cv.CV_GRAY2BGR);
             if circles is not None and len(circles)>0:
