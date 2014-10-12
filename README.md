@@ -1,3 +1,7 @@
+warning
+=======
+BlinkDetector is not done (yet)
+
 nap-alert
 =========
 
