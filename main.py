@@ -2,10 +2,7 @@
 
 """
 nap-alert
-by Brandon Jackson
-
-nap-alert.py
-Main python script
+Authors: Brandon Jackson, Alojzij Blatnik
 """
 
 # Import Libraries
@@ -33,7 +30,7 @@ from util import Util
 
  
 # Constants
-from GlobalConstants import GlobalConstants
+from globalconstants import GlobalConstants
 CAMERA_INDEX = GlobalConstants.CAMERA_INDEX
 SCALE_FACTOR = GlobalConstants.SCALE_FACTOR
 FACE_CLASSIFIER_PATH = GlobalConstants.FACE_CLASSIFIER_PATH
@@ -56,8 +53,11 @@ class Capture:
 	width = 0;
 	
 	def __init__(self, scaleFactor=1):
-	
-		# Setup webcam dimensions
+		# set resolution for the webcam
+		self.camera.set(3,1280)
+		self.camera.set(4,720)
+		
+		# get webcam dimensions
 		self.height = self.camera.get(cv.CV_CAP_PROP_FRAME_HEIGHT);
 		self.width = self.camera.get(cv.CV_CAP_PROP_FRAME_WIDTH);
 		
@@ -68,13 +68,9 @@ class Capture:
 			self.camera.set(cv.CV_CAP_PROP_FRAME_HEIGHT,scaledHeight);
 			self.camera.set(cv.CV_CAP_PROP_FRAME_WIDTH,scaledWidth);
 	
-		# Create window
-		#cv2.namedWindow("Video", cv2.CV_WINDOW_AUTOSIZE);
-	
 	def read(self):
 		retVal, colorFrame = self.camera.read();
 		displayFrame = cv2.resize(colorFrame,None,fx=DISPLAY_SCALE,fy=DISPLAY_SCALE);
-		#cv.ShowImage("w1", cv.fromarray(displayFrame))
 		
 		grayFrame = cv2.equalizeHist(cv2.cvtColor(colorFrame,cv.CV_BGR2GRAY));
 		
@@ -95,19 +91,20 @@ class Capture:
 def main():
 	# Instantiate Classes
 	detector = FaceDetector(FACE_CLASSIFIER_PATH, EYE_CLASSIFIER_PATH);
-	print "detector done"
 	model = FaceModel();
-	print "face model done"
 	display = Display();
-	print "display done"
 	capture = Capture();
-	print "capture done"
 	
 	oldTime = time.time();
 	i = 0;
 	frames_num=0
 	delta_sum = 0
 	while True:
+		# escape key for exit, in linux display is not working without that
+		k = cv2.waitKey(30) & 0xff
+		if k == 27:
+			return
+		
 		# Calculate time difference (dt), update oldTime variable
 		newTime = time.time();
 		dt =  newTime - oldTime;
@@ -119,9 +116,9 @@ def main():
 			print "delta:",delta_sum/float(frames_num),"frames pr sec:",1/float(delta_sum/float(frames_num))
 			frames_num=0
 			delta_sum = 0
+		
 		# Grab Frames
 		frames = capture.read();	
-		
 		
 		# Detect face 20% of the time, eyes 100% of the time
 		if i % 5 is 0:
@@ -132,15 +129,6 @@ def main():
 		
 		# Add detected rectangles to model
 		model.add(rects);
-		
-		# Render
-		#cv2.imshow("Video", frames['display']);#displayFrame);
-		#cv.ShowImage("w1", cv.fromarray(frames['display']))
-		k = cv2.waitKey(30) & 0xff
-		if k == 27:
-			return
-		#cv.ShowImage("w1", cv.fromarray(frames['display']))
-		
 		
 		display.renderScene(frames['display'],model,rects);
 		display.renderEyes(frames['color'],model);
