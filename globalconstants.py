@@ -22,6 +22,6 @@ class GlobalConstants:
     EYE_MIN_SIZE = 0.03;
     
     DISPLAY_SCALE = 0.3333;
-    FACE_SCALE = 0.25;
-    EYE_SCALE = 0.33333;
+    FACE_SCALE = 1;#0.25;
+    EYE_SCALE = 1;#0.33333;
 
